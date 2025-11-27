@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>润藏命理 - 专业命理分析服务</title>
+    <style>
+        :root {
+            --primary-color: #6a1b9a;
+            --secondary-color: #9c27b0;
+            --accent-color: #e1bee7;
+            --text-color: #333;
+            --light-bg: #f5f5f5;
+            --white: #ffffff;
+            --success-color: #4caf50;
+            --shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: var(--shadow);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .service-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            font-size: 24px;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .service-features {
+            list-style: none;
+            margin: 15px 0;
+        }
+        
+        .service-features li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .service-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-secondary {
+            background-color: #757575;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #616161;
+        }
+        
+        .payment-section {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+        
+        .qr-code img {
+            max-width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .instructions {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .status-message {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .payment-method {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .payment-method.active {
+            border-color: var(--primary-color);
+            background: #f3e5f5;
+        }
+        
+        .payment-method img {
+            height: 30px;
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .analysis-section {
+            display: none;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>润藏命理</h1>
+            <p>专业命理分析服务</p>
+        </div>
+        
+        <div class="content">
+            <!-- 服务选择 -->
+            <div id="service-selection">
+                <div class="service-card">
+                    <h3>测试验证服务</h3>
+                    <div class="price">¥19.9</div>
+                    <ul class="service-features">
+                        <li>深入分析八字原局喜忌</li>
+                        <li>解读性格特点</li>
+                        <li>测算之前每步大运吉凶</li>
+                        <li>过往关键流年吉凶验证</li>
+                    </ul>
+                    <button class="btn" onclick="selectService('测试验证服务', 19.9)">立即购买</button>
+                </div>
+                
+                <div class="service-card">
+                    <h3>流年运势分析</h3>
+                    <div class="price">¥38</div>
+                    <ul class="service-features">
+                        <li>深入分析八字原局喜忌</li>
+                        <li>解读性格特点</li>
+                        <li>测算当年及往后5年运势</li>
+                        <li>事业财运、婚姻感情等人生大事分析</li>
+                    </ul>
+                    <button class="btn" onclick="selectService('流年运势分析', 38)">立即购买</button>
+                </div>
+                
+                <div class="service-card">
+                    <h3>人生详批服务</h3>
+                    <div class="price">¥138</div>
+                    <ul class="service-features">
+                        <li>深入分析八字原局喜忌</li>
+                        <li>解读性格特点</li>
+                        <li>人生每步大运吉凶分析</li>
+                        <li>人生高低点分析</li>
+                        <li>往后关键流年分析</li>
+                    </ul>
+                    <button class="btn" onclick="selectService('人生详批服务', 138)">立即购买</button>
+                </div>
+            </div>
+            
+            <!-- 支付页面 -->
+            <div id="payment-section" class="payment-section">
+                <h2>支付订单</h2>
+                <div class="service-card">
+                    <p><strong>服务:</strong> <span id="payment-service-name">命理分析服务</span></p>
+                    <p><strong>金额:</strong> <span id="payment-amount">¥19.90</span></p>
+                    <p><strong>订单号:</strong> <span id="order-id">RZ123456789</span></p>
+                </div>
+                
+                <h3>选择支付方式</h3>
+                <div class="payment-methods">
+                    <div class="payment-method" id="wechat-option" onclick="selectPayment('wechat')">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzA3QzE2MCIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjEtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzQuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yNC4zIDg2LjcgMCAzMC41IDguNCA2MC41IDI0LjMgODYuNyAxNS45IDI2LjIgMzcuMSA0Ni44IDYxLjkgNjAuNCAyNy42IDE1LjIgNTkuOCAyMy4zIDkzLjMgMjMuMyAzMy41IDAgNjUuNy04LjEgOTMuMy0yMy4zIDI0LjgtMTMuNiA0Ni0zNC4yIDYxLjktNjAuNCAxNS45LTI2LjIgMjQuMy01Ni4yIDI0LjMtODYuNyAwLTMwLjUtOC40LTYwLjUtMjQuMy04Ni43eiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik0zOTUuOCA1MjcuMmMtMzAuOSAwLTU2LTI1LjEtNTYtNTZzMjUuMS01NiA1Ni01NiA1NiAyNS4xIDU2IDU2LTI1LjEgNTYtNTYgNTZ6bTIzMi40IDBjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2eiIvPjwvc3ZnPg==" alt="微信支付">
+                        <div>微信支付</div>
+                    </div>
+                    <div class="payment-method" id="alipay-option" onclick="selectPayment('alipay')">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzAwOTZFQyIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjEtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzQuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yNC4zIDg2LjcgMCAzMC41IDguNCA2MC41IDI0LjMgODYuNyAxNS45IDI2LjIgMzcuMSA0Ni44IDYxLjkgNjAuNCAyNy42IDE1LjIgNTkuOCAyMy4zIDkzLjMgMjMuMyAzMy41IDAgNjUuNy04LjEgOTMuMy0yMy4zIDI0LjgtMTMuNiA0Ni0zNC4yIDYxLjktNjAuNCAxNS45LTI2LjIgMjQuMy01Ni4yIDI0LjMtODYuNyAwLTMwLjUtOC40LTYwLjUtMjQuMy04Ni43eiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik00MjAuOSA0MTUuNGMtMzAuOSAwLTU2LTI1LjEtNTYtNTZzMjUuMS01NiA1Ni01NiA1NiAyNS4xIDU2IDU2LTI1LjEgNTYtNTYgNTZ6bTE4Mi4yIDBjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2eiIvPjwvc3ZnPg==" alt="支付宝">
+                        <div>支付宝</div>
+                    </div>
+                </div>
+                
+                <div class="qr-code" id="qr-code-section">
+                    <h3>请扫码支付</h3>
+                    <img id="qr-code-img" src="" alt="支付二维码">
+                </div>
+                
+                <div class="instructions">
+                    <p><strong>支付说明：</strong></p>
+                    <ol>
+                        <li>请使用<strong id="payment-app">微信</strong>扫描上方二维码完成支付</li>
+                        <li>支付金额：<strong id="display-amount">¥19.90</strong></li>
+                        <li>支付时请在备注中填写订单号：<strong id="display-order-id">RZ123456789</strong></li>
+                        <li>支付完成后，请点击下方"我已支付"按钮</li>
+                    </ol>
+                </div>
+                
+                <div id="status-message" class="status-message"></div>
+                
+                <button class="btn" id="confirm-payment-btn" onclick="confirmPayment()">我已支付</button>
+                <button class="btn btn-secondary" onclick="goBackToServices()">重新选择服务</button>
+            </div>
+            
+            <!-- 分析页面 -->
+            <div id="analysis-section" class="analysis-section">
+                <h2>润藏命理分析中</h2>
+                <p>基于您提供的信息，我们的专业命理师正在为您进行深度分析...</p>
+                <div class="spinner"></div>
+                <p>分析完成后，结果将显示在此页面</p>
+                <p>预计需要 2-3 分钟，请耐心等待</p>
+                
+                <div id="analysis-result" style="display: none; margin-top: 20px; text-align: left;">
+                    <!-- 分析结果将显示在这里 -->
+                </div>
+                
+                <button class="btn" onclick="goBackToServices()" style="margin-top: 20px;">返回服务列表</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>客服微信: runzang888 | 服务时间: 9:00-21:00</p>
+            <p>&copy; 2023 润藏命理咨询平台</p>
+        </div>
+    </div>
+
+    <script>
+        // 当前支付信息
+        let currentPayment = {
+            service: '',
+            amount: 0,
+            method: '',
+            orderId: ''
+        };
+        
+        // 服务数据
+        const services = {
+            '测试验证服务': {
+                price: 19.9,
+                prompt: `你是一位职业的命理大师，请根据用户信息进行八字分析，包括：1.分析八字原局喜忌 2.解读性格特点 3.测算之前每步大运吉凶 4.过往关键流年吉凶验证 5.提供专业建议。请用专业、详细但易懂的语言回复。`
+            },
+            '流年运势分析': {
+                price: 38,
+                prompt: `你是一位职业的命理大师，请根据用户信息进行八字分析，包括：1.分析八字原局喜忌 2.解读性格特点 3.测算当年及往后5年运势 4.事业财运、婚姻感情等人生大事分析 5.提供年度建议和注意事项。请用专业、详细但易懂的语言回复。`
+            },
+            '人生详批服务': {
+                price: 138,
+                prompt: `你是一位职业的命理大师，请根据用户信息进行全面八字分析，包括：1.深入分析八字原局喜忌 2.详细解读性格特点 3.人生每步大运吉凶分析 4.人生高低点分析 5.往后关键流年分析 6.重要人生事项提醒 7.风水建议和个人发展建议。请用专业、详尽但易懂的语言回复。`
+            }
+        };
+        
+        // 选择服务
+        function selectService(serviceName, price) {
+            currentPayment.service = serviceName;
+            currentPayment.amount = price;
+            
+            // 更新UI
+            document.getElementById('payment-service-name').textContent = serviceName;
+            document.getElementById('payment-amount').textContent = '¥' + price.toFixed(2);
+            document.getElementById('display-amount').textContent = '¥' + price.toFixed(2);
+            
+            // 生成订单ID
+            currentPayment.orderId = 'RZ' + Date.now() + Math.floor(Math.random() * 1000);
+            document.getElementById('order-id').textContent = currentPayment.orderId;
+            document.getElementById('display-order-id').textContent = currentPayment.orderId;
+            
+            // 显示支付页面
+            document.getElementById('service-selection').style.display = 'none';
+            document.getElementById('payment-section').style.display = 'block';
+            document.getElementById('analysis-section').style.display = 'none';
+            
+            // 重置支付选择
+            resetPaymentSelection();
+        }
+        
+        // 选择支付方式
+        function selectPayment(method) {
+            currentPayment.method = method;
+            
+            // 更新UI
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById(method + '-option').classList.add('active');
+            
+            // 更新支付说明
+            document.getElementById('payment-app').textContent = method === 'wechat' ? '微信' : '支付宝';
+            
+            // 显示对应的收款码
+            // 注意：您需要将您的收款码图片放在GitHub仓库中，并更新下面的URL
+            const qrImageUrl = method === 'wechat' 
+                ? 'images/wechat-qr.jpg'  // 替换为您的微信收款码图片路径
+                : 'images/alipay-qr.jpg'; // 替换为您的支付宝收款码图片路径
+            
+            document.getElementById('qr-code-img').src = qrImageUrl;
+            document.getElementById('qr-code-section').style.display = 'block';
+        }
+        
+        // 重置支付选择
+        function resetPaymentSelection() {
+            currentPayment.method = '';
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById('qr-code-section').style.display = 'none';
+            document.getElementById('status-message').className = 'status-message';
+            document.getElementById('status-message').textContent = '';
+        }
+        
+        // 确认支付
+        function confirmPayment() {
+            if (!currentPayment.method) {
+                showStatus('请先选择支付方式', 'error');
+                return;
+            }
+            
+            // 显示分析页面
+            document.getElementById('service-selection').style.display = 'none';
+            document.getElementById('payment-section').style.display = 'none';
+            document.getElementById('analysis-section').style.display = 'block';
+            
+            // 开始分析
+            startAnalysis();
+        }
+        
+        // 开始分析
+        async function startAnalysis() {
+            try {
+                // 这里直接调用DeepSeek API
+                const analysisResult = await callDeepSeekAPI();
+                
+                // 显示分析结果
+                document.querySelector('.spinner').style.display = 'none';
+                document.getElementById('analysis-result').style.display = 'block';
+                document.getElementById('analysis-result').innerHTML = `
+                    <h3>命理分析结果</h3>
+                    <div style="white-space: pre-wrap; background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                        ${analysisResult}
+                    </div>
+                    <button class="btn" onclick="downloadResult()" style="margin-top: 15px;">下载分析报告</button>
+                `;
+                
+                // 保存订单到本地存储
+                saveOrderToLocalStorage();
+                
+            } catch (error) {
+                console.error('分析失败:', error);
+                document.querySelector('.spinner').style.display = 'none';
+                document.getElementById('analysis-result').style.display = 'block';
+                document.getElementById('analysis-result').innerHTML = `
+                    <div class="error" style="padding: 15px; background: #ffebee; border-radius: 5px;">
+                        <p>分析失败，请稍后重试或联系客服</p>
+                        <button class="btn" onclick="startAnalysis()" style="margin-top: 10px;">重新分析</button>
+                    </div>
+                `;
+            }
+        }
+        
+        // 调用DeepSeek API
+        async function callDeepSeekAPI() {
+            const DEEPSEEK_API_KEY = "sk-0c763bf4e169413dbd57a45e8ca73a6a";
+            const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+            
+            const prompt = services[currentPayment.service].prompt;
+            
+            const response = await fetch(DEEPSEEK_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "deepseek-reasoner",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "你是一位资深的命理大师，精通八字命理、紫微斗数等传统命理学。请根据用户提供的信息进行专业的命理分析，提供详细、准确且易懂的解读。"
+                        },
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 4000
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('API请求失败');
+            }
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+        
+        // 保存订单到本地存储
+        function saveOrderToLocalStorage() {
+            const order = {
+                ...currentPayment,
+                paidAt: new Date().toISOString(),
+                status: 'completed'
+            };
+            
+            // 获取现有订单
+            const orders = JSON.parse(localStorage.getItem('runzang_orders') || '[]');
+            
+            // 添加新订单
+            orders.push(order);
+            
+            // 保存回本地存储
+            localStorage.setItem('runzang_orders', JSON.stringify(orders));
+        }
+        
+        // 下载分析结果
+        function downloadResult() {
+            const resultText = document.getElementById('analysis-result').innerText;
+            const blob = new Blob([resultText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `润藏命理分析报告_${currentPayment.orderId}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 显示状态消息
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('status-message');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type}`;
+        }
+        
+        // 返回服务列表
+        function goBackToServices() {
+            document.getElementById('service-selection').style.display = 'block';
+            document.getElementById('payment-section').style.display = 'none';
+            document.getElementById('analysis-section').style.display = 'none';
+        }
+        
+        // 页面加载时检查URL参数
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const service = urlParams.get('service');
+            const amount = urlParams.get('amount');
+            
+            if (service && amount) {
+                selectService(service, parseFloat(amount));
+            }
+        };
+    </script>
+</body>
+</html>
