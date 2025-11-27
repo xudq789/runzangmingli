@@ -470,6 +470,20 @@
             overflow-y: auto;
         }
         
+        .result-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .word-count {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        
         /* 成功消息 */
         .success-message {
             display: none;
@@ -583,6 +597,10 @@
                 width: 95%;
                 margin: 10% auto;
                 padding: 20px;
+            }
+            
+            .result-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -931,7 +949,13 @@
             </div>
             
             <div class="analysis-result" id="analysis-result">
-                <!-- 分析结果将直接显示在这里 -->
+                <div id="result-content" style="margin-bottom: 20px;"></div>
+                <div class="word-count">报告字数: <span id="word-count">0</span> 字</div>
+                <div class="result-actions">
+                    <button class="btn" onclick="copyResult()">复制结果</button>
+                    <button class="btn" onclick="downloadResult()">下载报告</button>
+                    <button class="btn" style="background-color: #6c757d;" onclick="goToHome()">返回首页</button>
+                </div>
             </div>
         </div>
     </section>
@@ -1059,12 +1083,90 @@
 请用专业、详细但易懂的语言回复，字数在2000-3000字左右。`
         };
 
-        // DeepSeek API密钥
-        const DEEPSEEK_API_KEY = "sk-0c763bf4e169413dbd57a45e8ca73a6a";
-        const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+        // 模拟分析结果（用于演示）
+        const MOCK_ANALYSIS_RESULTS = {
+            '测试验证服务': `【润藏命理分析报告 - 测试验证服务】
+
+尊敬的{name}，您好！
+
+根据您提供的出生信息（{birthYear}年{birthMonth}月{birthDay}日{birthHour}时{birthMinute}分），润藏命理团队为您进行了深入的八字分析。
+
+一、八字原局分析
+您的八字为：{八字排盘结果}
+日主为{日主}，生于{月令}月，整体格局为{格局类型}。
+
+五行喜忌：
+- 喜神：{喜神}
+- 用神：{用神}
+- 忌神：{忌神}
+
+二、性格特点
+您具有{性格特点1}、{性格特点2}的特质，为人{性格描述}。在人际交往中{社交特点}，在事业上{事业倾向}。
+
+三、过往大运分析
+根据您的人生大运走势：
+- {年龄段}大运：{大运特点}
+- {年龄段}大运：{大运特点}
+- {年龄段}大运：{大运特点}
+
+四、关键流年验证
+- {年份}年：{事件描述}
+- {年份}年：{事件描述}
+- {年份}年：{事件描述}
+
+五、专业建议
+基于您的命局特点，建议您：
+1. {建议1}
+2. {建议2}
+3. {建议3}
+
+以上分析由润藏命理团队专业命理师完成，仅供参考。`,
+
+            '流年运势分析': `【润藏命理分析报告 - 流年运势分析】
+
+尊敬的{name}，您好！
+
+根据您提供的出生信息，润藏命理团队为您详细分析了当前及未来五年的运势走向。
+
+一、八字原局概况
+{八字原局简要分析}
+
+二、性格特点
+{性格特点分析}
+
+三、未来五年运势详解
+{年份}年：
+- 事业：{事业运势}
+- 财运：{财运分析}
+- 感情：{感情运势}
+- 健康：{健康提醒}
+
+{年份}年：
+- 事业：{事业运势}
+- 财运：{财运分析}
+- 感情：{感情运势}
+- 健康：{健康提醒}
+
+{年份}年：
+- 事业：{事业运势}
+- 财运：{财运分析}
+- 感情：{感情运势}
+- 健康：{健康提醒}
+
+四、年度重点提醒
+1. {重点提醒1}
+2. {重点提醒2}
+3. {重点提醒3}
+
+五、求测事项专项分析
+{针对用户具体求测事项的专项分析}
+
+以上分析由润藏命理团队专业命理师完成，祝您运势亨通！`
+        };
         
         // 当前选择的支付信息
         let currentPaymentInfo = null;
+        let currentUserData = null;
         
         // 生成小时和分钟选项
         function generateTimeOptions() {
@@ -1288,6 +1390,9 @@
                 orderId: orderId
             };
             
+            // 收集用户数据
+            currentUserData = collectUserData();
+            
             // 显示支付弹窗
             document.getElementById('payment-service-type').textContent = serviceName;
             document.getElementById('payment-amount').textContent = '¥' + price;
@@ -1330,18 +1435,15 @@
             updateAnalysisStep(1);
             
             try {
-                // 收集用户信息
-                const userData = collectUserData();
-                
-                // 调用DeepSeek API
-                const analysisResult = await callDeepSeekAPI(userData);
+                // 调用分析API（这里使用模拟数据）
+                const analysisResult = await callAnalysisAPI(currentUserData);
                 
                 // 显示分析结果
                 displayAnalysisResult(analysisResult);
                 
             } catch (error) {
                 console.error('分析失败:', error);
-                document.getElementById('analysis-result').innerHTML = '分析失败，请稍后重试或联系客服';
+                document.getElementById('result-content').textContent = '分析失败，请稍后重试或联系客服';
                 document.getElementById('analysis-result').style.display = 'block';
             }
         }
@@ -1414,101 +1516,58 @@
             }
         }
         
-        // 调用DeepSeek API
-        async function callDeepSeekAPI(userData) {
-            // 构建提示词
-            const prompt = buildPrompt(userData);
+        // 调用分析API（模拟版本）
+        async function callAnalysisAPI(userData) {
+            // 模拟API调用延迟
+            await new Promise(resolve => setTimeout(resolve, 3000));
             
-            // 准备API请求
-            const requestBody = {
-                model: "deepseek-reasoner",
-                messages: [
-                    {
-                        role: "user",
-                        content: prompt
-                    }
-                ],
-                temperature: 0.7,
-                max_tokens: 4000
-            };
-            
-            // 发送API请求
-            const response = await fetch(DEEPSEEK_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-                },
-                body: JSON.stringify(requestBody)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`API请求失败: ${response.status}`);
+            // 使用模拟数据
+            let result;
+            if (MOCK_ANALYSIS_RESULTS[userData.serviceType]) {
+                result = MOCK_ANALYSIS_RESULTS[userData.serviceType];
+                
+                // 替换占位符
+                result = result.replace(/{name}/g, userData.name)
+                              .replace(/{birthYear}/g, userData.birthYear)
+                              .replace(/{birthMonth}/g, userData.birthMonth)
+                              .replace(/{birthDay}/g, userData.birthDay)
+                              .replace(/{birthHour}/g, userData.birthHour)
+                              .replace(/{birthMinute}/g, userData.birthMinute);
+            } else {
+                result = `【润藏命理分析报告】
+
+尊敬的${userData.name}，您好！
+
+根据您提供的出生信息（${userData.birthYear}年${userData.birthMonth}月${userData.birthDay}日${userData.birthHour}时${userData.birthMinute}分），润藏命理团队为您进行了深入的命理分析。
+
+您的${userData.serviceType}分析已完成，具体内容如下：
+
+[此处为专业的命理分析内容...]
+
+以上分析由润藏命理团队专业命理师完成，仅供参考。`;
             }
             
-            const data = await response.json();
-            return data.choices[0].message.content;
+            return result;
         }
         
-        // 构建提示词
-        function buildPrompt(userData) {
-            // 获取对应的提示词模板
-            let prompt = PROMPT_TEMPLATES[userData.serviceType];
-            
-            if (!prompt) {
-                // 默认提示词
-                prompt = `你是一位专业的命理大师，请根据以下信息进行命理分析：
-
-用户信息：
-姓名：{name}
-性别：{gender}
-出生时间：{birthYear}年{birthMonth}月{birthDay}日{birthHour}时{birthMinute}分
-具体求测事项：{specificRequest}
-
-请进行专业、详细的命理分析，并提供实用建议。`;
-            }
-            
-            // 替换模板中的占位符
-            prompt = prompt.replace(/{name}/g, userData.name)
-                          .replace(/{gender}/g, userData.gender === 'male' ? '男' : '女')
-                          .replace(/{birthYear}/g, userData.birthYear)
-                          .replace(/{birthMonth}/g, userData.birthMonth)
-                          .replace(/{birthDay}/g, userData.birthDay)
-                          .replace(/{birthHour}/g, userData.birthHour)
-                          .replace(/{birthMinute}/g, userData.birthMinute)
-                          .replace(/{specificRequest}/g, userData.specificRequest || '无');
-            
-            // 如果是婚缘配对分析，替换伴侣信息
-            if (userData.serviceType === '婚缘配对分析' && userData.partnerData) {
-                prompt = prompt.replace(/{partnerName}/g, userData.partnerData.name)
-                              .replace(/{partnerGender}/g, userData.partnerData.gender === 'male' ? '男' : '女')
-                              .replace(/{partnerBirthYear}/g, userData.partnerData.birthYear)
-                              .replace(/{partnerBirthMonth}/g, userData.partnerData.birthMonth)
-                              .replace(/{partnerBirthDay}/g, userData.partnerData.birthDay)
-                              .replace(/{partnerBirthHour}/g, userData.partnerData.birthHour)
-                              .replace(/{partnerBirthMinute}/g, userData.partnerData.birthMinute);
-            }
-            
-            return prompt;
-        }
-        
-         // 显示分析结果 - 直接使用返回的原始格式
+        // 显示分析结果
         function displayAnalysisResult(result) {
-            // 替换可能出现的AI相关词汇
-            const cleanedResult = result.replace(/AI|人工智能|DeepSeek|deepseek/gi, '润藏命理团队');
-            
             // 显示分析结果区域
-            document.getElementById('analysis-result').style.display = 'block';
+            const resultElement = document.getElementById('analysis-result');
+            resultElement.style.display = 'block';
             
-            // 直接显示原始结果，不做任何修改
-            document.getElementById('result-content').textContent = cleanedResult;
+            // 将结果直接显示在正确的位置
+            document.getElementById('result-content').textContent = result;
             
             // 计算字数
-            const wordCount = cleanedResult.replace(/\s/g, '').length;
+            const wordCount = result.replace(/\s/g, '').length;
             document.getElementById('word-count').textContent = wordCount;
             
+            // 隐藏加载动画
+            document.querySelector('.spinner').style.display = 'none';
+            
             // 滚动到结果区域
-            document.getElementById('analysis-result').scrollIntoView({ behavior: 'smooth' });
+            resultElement.scrollIntoView({ behavior: 'smooth' });
         }
         
         // 复制结果到剪贴板
@@ -1525,9 +1584,9 @@
         // 下载分析报告
         function downloadResult() {
             const resultText = document.getElementById('result-content').textContent;
-            const serviceType = document.getElementById('service-type').value.split(' - ')[0];
-            const name = document.getElementById('name').value;
-            const orderId = document.getElementById('order-id').textContent;
+            const serviceType = currentPaymentInfo.serviceName;
+            const name = currentUserData.name;
+            const orderId = currentPaymentInfo.orderId;
             
             const blob = new Blob([`润藏命理分析报告\n\n服务类型：${serviceType}\n姓名：${name}\n订单号：${orderId}\n分析时间：${new Date().toLocaleString()}\n\n${resultText}`], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -1550,6 +1609,9 @@
             document.querySelectorAll('.payment-option').forEach(option => {
                 option.classList.remove('active');
             });
+            
+            // 重置加载动画
+            document.querySelector('.spinner').style.display = 'block';
             
             // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
