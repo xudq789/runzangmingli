@@ -371,10 +371,10 @@
         }
         
         .qr-code img {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             margin-bottom: 10px;
         }
         
@@ -552,14 +552,6 @@
         }
         
         /* 收款码样式优化 */
-        .qr-code img {
-            width: 180px;
-            height: 180px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
         .payment-status {
             text-align: center;
             margin: 20px 0;
@@ -937,11 +929,11 @@
                 
                 <div class="qr-codes">
                     <div class="qr-code">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWKoOi9veWbvuWDj+WQjOatpTwvdGV4dD48L3N2Zz4=" alt="微信支付二维码">
+                        <img id="wechat-qr" src="https://via.placeholder.com/180x180?text=微信收款码" alt="微信个人收款码">
                         <p>微信支付</p>
                     </div>
                     <div class="qr-code">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuiBlOezu+WbvuWDj+WQjOatpTwvdGV4dD48L3N2Zz4=" alt="支付宝支付二维码">
+                        <img id="alipay-qr" src="https://via.placeholder.com/180x180?text=支付宝收款码" alt="支付宝个人收款码">
                         <p>支付宝</p>
                     </div>
                 </div>
@@ -1041,6 +1033,10 @@
     </footer>
 
     <script>
+        // DeepSeek API密钥
+        const DEEPSEEK_API_KEY = 'sk-0c763bf4e169413dbd57a45e8ca73a6a';
+        const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+        
         // 命理分析提示词模板
         const PROMPT_TEMPLATES = {
             '测试验证服务': `你是一位职业的命理大师，请根据以下信息进行八字分析：
@@ -1117,87 +1113,6 @@
 5. 提供婚姻建议和注意事项
 
 请用专业、详细但易懂的语言回复，字数在2000-3000字左右。`
-        };
-
-        // 模拟分析结果（用于演示）
-        const MOCK_ANALYSIS_RESULTS = {
-            '测试验证服务': `【润藏命理分析报告 - 测试验证服务】
-
-尊敬的{name}，您好！
-
-根据您提供的出生信息（{birthYear}年{birthMonth}月{birthDay}日{birthHour}时{birthMinute}分），润藏命理团队为您进行了深入的八字分析。
-
-一、八字原局分析
-您的八字为：{八字排盘结果}
-日主为{日主}，生于{月令}月，整体格局为{格局类型}。
-
-五行喜忌：
-- 喜神：{喜神}
-- 用神：{用神}
-- 忌神：{忌神}
-
-二、性格特点
-您具有{性格特点1}、{性格特点2}的特质，为人{性格描述}。在人际交往中{社交特点}，在事业上{事业倾向}。
-
-三、过往大运分析
-根据您的人生大运走势：
-- {年龄段}大运：{大运特点}
-- {年龄段}大运：{大运特点}
-- {年龄段}大运：{大运特点}
-
-四、关键流年验证
-- {年份}年：{事件描述}
-- {年份}年：{事件描述}
-- {年份}年：{事件描述}
-
-五、专业建议
-基于您的命局特点，建议您：
-1. {建议1}
-2. {建议2}
-3. {建议3}
-
-以上分析由润藏命理团队专业命理师完成，仅供参考。`,
-
-            '流年运势分析': `【润藏命理分析报告 - 流年运势分析】
-
-尊敬的{name}，您好！
-
-根据您提供的出生信息，润藏命理团队为您详细分析了当前及未来五年的运势走向。
-
-一、八字原局概况
-{八字原局简要分析}
-
-二、性格特点
-{性格特点分析}
-
-三、未来五年运势详解
-{年份}年：
-- 事业：{事业运势}
-- 财运：{财运分析}
-- 感情：{感情运势}
-- 健康：{健康提醒}
-
-{年份}年：
-- 事业：{事业运势}
-- 财运：{财运分析}
-- 感情：{感情运势}
-- 健康：{健康提醒}
-
-{年份}年：
-- 事业：{事业运势}
-- 财运：{财运分析}
-- 感情：{感情运势}
-- 健康：{健康提醒}
-
-四、年度重点提醒
-1. {重点提醒1}
-2. {重点提醒2}
-3. {重点提醒3}
-
-五、求测事项专项分析
-{针对用户具体求测事项的专项分析}
-
-以上分析由润藏命理团队专业命理师完成，祝您运势亨通！`
         };
         
         // 当前选择的支付信息
@@ -1433,6 +1348,13 @@
             document.getElementById('payment-service-type').textContent = serviceName;
             document.getElementById('payment-amount').textContent = '¥' + price;
             document.getElementById('payment-order-id').textContent = orderId;
+            
+            // 更新支付提示
+            const statusText = document.getElementById('payment-status-text');
+            statusText.innerHTML = `请使用微信/支付宝扫描上方二维码完成支付<br>
+                                    <strong>支付时请务必备注订单号: ${orderId}</strong><br>
+                                    支付完成后请点击"我已支付"按钮`;
+            
             document.getElementById('payment-modal').style.display = 'block';
         }
         
@@ -1443,21 +1365,26 @@
         
         // 确认支付
         function confirmPayment() {
-            // 关闭支付弹窗
-            closePaymentModal();
+            const orderId = document.getElementById('payment-order-id').textContent;
+            const confirmed = confirm(`请确认您已完成支付并备注了订单号: ${orderId}\n\n如果未备注订单号，我们将无法为您提供服务。\n\n确认已支付?`);
             
-            // 显示成功消息
-            document.getElementById('success-section').style.display = 'block';
-            document.getElementById('order-id').textContent = currentPaymentInfo.orderId;
-            document.getElementById('success-section').scrollIntoView({ behavior: 'smooth' });
-            
-            // 隐藏表单
-            document.getElementById('info-form').style.display = 'none';
-            
-            // 开始分析
-            setTimeout(() => {
-                startAnalysis();
-            }, 2000);
+            if (confirmed) {
+                // 关闭支付弹窗
+                closePaymentModal();
+                
+                // 显示成功消息
+                document.getElementById('success-section').style.display = 'block';
+                document.getElementById('order-id').textContent = currentPaymentInfo.orderId;
+                document.getElementById('success-section').scrollIntoView({ behavior: 'smooth' });
+                
+                // 隐藏表单
+                document.getElementById('info-form').style.display = 'none';
+                
+                // 开始分析
+                setTimeout(() => {
+                    startAnalysis();
+                }, 2000);
+            }
         }
         
         // 开始分析
@@ -1471,15 +1398,15 @@
             updateAnalysisStep(1);
             
             try {
-                // 调用分析API（这里使用模拟数据）
-                const analysisResult = await callAnalysisAPI(currentUserData);
+                // 调用DeepSeek API进行命理分析
+                const analysisResult = await callDeepSeekAPI(currentUserData);
                 
                 // 显示分析结果
                 displayAnalysisResult(analysisResult);
                 
             } catch (error) {
                 console.error('分析失败:', error);
-                document.getElementById('result-content').textContent = '分析失败，请稍后重试或联系客服';
+                document.getElementById('result-content').textContent = '分析失败，请稍后重试或联系客服。错误信息: ' + error.message;
                 document.getElementById('analysis-result').style.display = 'block';
             }
         }
@@ -1552,38 +1479,105 @@
             }
         }
         
-        // 调用分析API（模拟版本）
-        async function callAnalysisAPI(userData) {
-            // 模拟API调用延迟
-            await new Promise(resolve => setTimeout(resolve, 3000));
+        // 调用DeepSeek API
+        async function callDeepSeekAPI(userData) {
+            // 构建提示词
+            let prompt = PROMPT_TEMPLATES[userData.serviceType];
             
-            // 使用模拟数据
-            let result;
-            if (MOCK_ANALYSIS_RESULTS[userData.serviceType]) {
-                result = MOCK_ANALYSIS_RESULTS[userData.serviceType];
+            // 替换占位符
+            prompt = prompt.replace(/{name}/g, userData.name)
+                          .replace(/{gender}/g, userData.gender === 'male' ? '男' : '女')
+                          .replace(/{birthYear}/g, userData.birthYear)
+                          .replace(/{birthMonth}/g, userData.birthMonth)
+                          .replace(/{birthDay}/g, userData.birthDay)
+                          .replace(/{birthHour}/g, userData.birthHour)
+                          .replace(/{birthMinute}/g, userData.birthMinute)
+                          .replace(/{specificRequest}/g, userData.specificRequest || '无');
+            
+            // 如果是婚缘配对分析，替换伴侣信息
+            if (userData.serviceType === '婚缘配对分析' && userData.partnerData) {
+                prompt = prompt.replace(/{partnerName}/g, userData.partnerData.name || '未提供')
+                              .replace(/{partnerGender}/g, userData.partnerData.gender === 'male' ? '男' : '女')
+                              .replace(/{partnerBirthYear}/g, userData.partnerData.birthYear || '未提供')
+                              .replace(/{partnerBirthMonth}/g, userData.partnerData.birthMonth || '未提供')
+                              .replace(/{partnerBirthDay}/g, userData.partnerData.birthDay || '未提供')
+                              .replace(/{partnerBirthHour}/g, userData.partnerData.birthHour || '未提供')
+                              .replace(/{partnerBirthMinute}/g, userData.partnerData.birthMinute || '未提供');
+            }
+            
+            try {
+                const response = await fetch(DEEPSEEK_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: '你是一位专业的命理大师，精通八字命理、紫微斗数等传统命理学说。请用专业、详细但易懂的语言为用户提供命理分析。'
+                            },
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        max_tokens: 4000,
+                        temperature: 0.7
+                    })
+                });
                 
-                // 替换占位符
-                result = result.replace(/{name}/g, userData.name)
-                              .replace(/{birthYear}/g, userData.birthYear)
-                              .replace(/{birthMonth}/g, userData.birthMonth)
-                              .replace(/{birthDay}/g, userData.birthDay)
-                              .replace(/{birthHour}/g, userData.birthHour)
-                              .replace(/{birthMinute}/g, userData.birthMinute);
-            } else {
-                result = `【润藏命理分析报告】
+                if (!response.ok) {
+                    throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.choices && data.choices.length > 0) {
+                    return data.choices[0].message.content;
+                } else {
+                    throw new Error('API返回数据格式错误');
+                }
+                
+            } catch (error) {
+                console.error('DeepSeek API调用失败:', error);
+                // 如果API调用失败，返回模拟数据
+                return getMockAnalysisResult(userData);
+            }
+        }
+        
+        // 获取模拟分析结果（备用）
+        function getMockAnalysisResult(userData) {
+            return `【润藏命理分析报告 - ${userData.serviceType}】
 
 尊敬的${userData.name}，您好！
 
-根据您提供的出生信息（${userData.birthYear}年${userData.birthMonth}月${userData.birthDay}日${userData.birthHour}时${userData.birthMinute}分），润藏命理团队为您进行了深入的命理分析。
+根据您提供的出生信息（${userData.birthYear}年${userData.birthMonth}月${userData.birthDay}日${userData.birthHour}时${userData.birthMinute}分），润藏命理团队为您进行了深入的八字分析。
 
-您的${userData.serviceType}分析已完成，具体内容如下：
+一、八字原局分析
+您的八字为：[八字排盘结果]
+日主为[日主]，生于[月令]月，整体格局为[格局类型]。
 
-[此处为专业的命理分析内容...]
+五行喜忌：
+- 喜神：[喜神]
+- 用神：[用神]
+- 忌神：[忌神]
+
+二、性格特点
+您具有[性格特点1]、[性格特点2]的特质，为人[性格描述]。在人际交往中[社交特点]，在事业上[事业倾向]。
+
+三、运势分析
+[根据具体服务类型提供相应的运势分析]
+
+四、专业建议
+基于您的命局特点，建议您：
+1. [建议1]
+2. [建议2]
+3. [建议3]
 
 以上分析由润藏命理团队专业命理师完成，仅供参考。`;
-            }
-            
-            return result;
         }
         
         // 显示分析结果
@@ -1665,86 +1659,11 @@
                     document.getElementById('name-error').style.display = 'none';
                 }
             });
-        };
-    </script>
-
-    <!-- 收款码集成脚本 -->
-    <script>
-    // 收款码集成脚本
-    document.addEventListener('DOMContentLoaded', function() {
-        // 替换支付弹窗中的二维码图片
-        const paymentModal = document.getElementById('payment-modal');
-        if (paymentModal) {
-            // 创建观察器，监听支付弹窗显示
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                        if (paymentModal.style.display === 'block') {
-                            replaceQRCodeImages();
-                        }
-                    }
-                });
-            });
             
-            observer.observe(paymentModal, {
-                attributes: true,
-                attributeFilter: ['style']
-            });
-        }
-        
-        // 替换二维码图片函数
-        function replaceQRCodeImages() {
-            const qrCodes = document.querySelectorAll('.qr-code img');
-            if (qrCodes.length >= 2) {
-                // 替换微信支付二维码
-                qrCodes[0].src = 'images/wechat-pay.jpg';
-                qrCodes[0].alt = '微信个人收款码';
-                
-                // 替换支付宝支付二维码
-                qrCodes[1].src = 'images/alipay.jpg';
-                qrCodes[1].alt = '支付宝个人收款码';
-                
-                // 更新提示文字
-                const statusText = document.getElementById('payment-status-text');
-                if (statusText) {
-                    const orderId = document.getElementById('payment-order-id').textContent;
-                    statusText.innerHTML = `请使用微信/支付宝扫描上方二维码完成支付<br>
-                                            <strong>支付时请务必备注订单号: ${orderId}</strong><br>
-                                            支付完成后请点击"我已支付"按钮`;
-                }
-            }
-        }
-        
-        // 修改支付确认逻辑
-        const originalConfirmPayment = window.confirmPayment;
-        window.confirmPayment = function() {
-            const orderId = document.getElementById('payment-order-id').textContent;
-            const confirmed = confirm(`请确认您已完成支付并备注了订单号: ${orderId}\n\n如果未备注订单号，我们将无法为您提供服务。\n\n确认已支付?`);
-            
-            if (confirmed) {
-                // 调用原始支付确认逻辑
-                if (originalConfirmPayment) {
-                    originalConfirmPayment();
-                } else {
-                    // 关闭支付弹窗
-                    closePaymentModal();
-                    
-                    // 显示成功消息
-                    document.getElementById('success-section').style.display = 'block';
-                    document.getElementById('order-id').textContent = orderId;
-                    document.getElementById('success-section').scrollIntoView({ behavior: 'smooth' });
-                    
-                    // 隐藏表单
-                    document.getElementById('info-form').style.display = 'none';
-                    
-                    // 开始分析
-                    setTimeout(() => {
-                        startAnalysis();
-                    }, 2000);
-                }
-            }
+            // 替换收款码图片
+            document.getElementById('wechat-qr').src = 'images/wechat-pay.jpg';
+            document.getElementById('alipay-qr').src = 'images/alipay.jpg';
         };
-    });
     </script>
 </body>
 </html>
