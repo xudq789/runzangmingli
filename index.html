@@ -29,6 +29,7 @@
             background-color: var(--light-bg);
             color: var(--text-color);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
@@ -324,7 +325,7 @@
             max-height: 40px;
         }
         
-        /* 支付弹窗样式 */
+        /* 支付弹窗样式 - 移动端优化 */
         .modal {
             display: none;
             position: fixed;
@@ -334,6 +335,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
         }
         
         .modal-content {
@@ -345,6 +347,8 @@
             width: 90%;
             max-width: 500px;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .close {
@@ -566,6 +570,11 @@
             gap: 10px;
             justify-content: center;
             margin-top: 20px;
+            position: sticky;
+            bottom: 0;
+            background-color: var(--white);
+            padding: 15px 0;
+            border-top: 1px solid #eee;
         }
 
         .order-info {
@@ -579,7 +588,7 @@
             margin-bottom: 8px;
         }
         
-        /* 响应式设计 */
+        /* 响应式设计 - 移动端优化 */
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -623,12 +632,73 @@
             
             .modal-content {
                 width: 95%;
-                margin: 10% auto;
+                margin: 5% auto;
                 padding: 20px;
+                max-height: 95vh;
             }
             
             .result-actions {
                 flex-direction: column;
+            }
+            
+            /* 移动端支付弹窗优化 */
+            .qr-code img {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .payment-actions {
+                position: sticky;
+                bottom: 0;
+                background-color: var(--white);
+                padding: 15px 0;
+                border-top: 1px solid #eee;
+                z-index: 10;
+            }
+            
+            .modal-body {
+                padding-bottom: 80px; /* 为固定按钮留出空间 */
+            }
+            
+            /* 移动端表单优化 */
+            .form-container {
+                padding: 20px;
+            }
+            
+            .service-card {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 80px 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .price {
+                font-size: 1.5rem;
+            }
+            
+            .qr-code img {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
             }
         }
     </style>
@@ -897,7 +967,7 @@
                         </div>
                         <div class="payment-option" id="alipay" onclick="selectPayment('alipay')">
                             <div class="payment-icon">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzAwOTZFQyIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjEtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzMuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yNC4zIDg2LjcgMCAzMC41IDguNCA2MC41IDI0LjMgODYuNyAxNS45IDI2LjIgMzcuMSA0Ni44IDYxLjkgNjAuNCAyNy42IDE1LjIgNTkuOCAyMy4zIDkzLjMgMjMuMyAzMy41IDAgNjUuNy04LjEgOTMuMy0yMy4zIDI0LjgtMTMuNiA0Ni0zNC4yIDYxLjktNjAuNCAxNS45LTI2LjIgMjQuMy01Ni4yIDI0LjMtODYuNyAwLTMwLjUtOC40LTYwLjUtMjQuMy04Ni43eiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik00MjAuOSA0MTUuNGMtMzAuOSAwLTU2LTI1LjEtNTYtNTZzMjUuMS01NiA1Ni01NiA1NiAyNS4xIDU2IDU2LTI1LjEgNTYtNTYgNTZ6bTE4Mi4yIDBjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2eiIvPjwvc3ZnPg==" alt="支付宝">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzAwOTZFQyIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjEtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzMuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yQzMuMyA4Ni43IDAgMzAuNSA4LjQgNjAuNSAyNC4zIDg2LjcgMTUuOSAyNi4yIDM3LjEgNDYuOCA2MS45IDYwLjQgMjcuNiAxNS4yIDU5LjggMjMuMyA5My4zIDIzLjMgMzMuNSAwIDY1LjctOC4xIDkzLjMtMjMuMyAyNC44LTEzLjYgNDYtMzQuMiA2MS45LTYwLjQgMTUuOS0yNi4yIDI0LjMtNTYuMiAyNC4zLTg2LjcgMC0zMC41LTguNC02MC41LTI0LjMtODYuN3oiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNNDIwLjkgNDE1LjRjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2em0xODIuMiAwYy0zMC45IDAtNTYtMjUuMS01Ni01NnMyNS4xLTU2IDU2LTU2IDU2IDI1LjEgNTYgNTYtMjUuMSA1Ni01NiA1NnoiLz48L3N2Zz4=" alt="支付宝">
                             </div>
                             <div>支付宝</div>
                         </div>
@@ -1021,8 +1091,8 @@
                     <h3>联系我们</h3>
                     <ul class="footer-links">
                         <li>客服微信: runzang888</li>
-                        <li>客服电话: 400-000-1388</li>
-                        <li>服务时间: 9:00-17:00</li>
+                        <li>客服电话: 400-888-9999</li>
+                        <li>服务时间: 9:00-21:00</li>
                     </ul>
                 </div>
             </div>
@@ -1335,7 +1405,7 @@
             const price = parseFloat(serviceType.split('¥')[1]);
             
             // 生成订单ID
-            const orderId = 'RZ' + Date.now();
+            const orderId = 'RZ' + Date.now() + Math.floor(Math.random() * 1000);
             
             // 保存当前支付信息
             currentPaymentInfo = {
@@ -1354,6 +1424,9 @@
             
             // 根据支付方式更新支付弹窗内容
             updatePaymentModalContent();
+            
+            // 禁用背景滚动
+            document.body.style.overflow = 'hidden';
             
             document.getElementById('payment-modal').style.display = 'block';
         }
@@ -1384,6 +1457,8 @@
         // 关闭支付弹窗
         function closePaymentModal() {
             document.getElementById('payment-modal').style.display = 'none';
+            // 恢复背景滚动
+            document.body.style.overflow = 'auto';
         }
         
         // 确认支付
@@ -1688,6 +1763,13 @@
             // 替换收款码图片
             document.getElementById('wechat-qr').src = 'images/wechat-pay.jpg';
             document.getElementById('alipay-qr').src = 'images/alipay.jpg';
+            
+            // 点击模态框外部关闭模态框
+            document.getElementById('payment-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closePaymentModal();
+                }
+            });
         };
     </script>
 </body>
