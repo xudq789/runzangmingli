@@ -701,6 +701,22 @@
                 font-size: 14px;
             }
         }
+        
+        /* 固定金额二维码样式 */
+        .fixed-amount-info {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .fixed-amount-info p {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
     </style>
 </head>
 <body>
@@ -967,7 +983,7 @@
                         </div>
                         <div class="payment-option" id="alipay" onclick="selectPayment('alipay')">
                             <div class="payment-icon">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzAwOTZFQyIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjEtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzMuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yQzMuMyA4Ni43IDAgMzAuNSA4LjQgNjAuNSAyNC4zIDg2LjcgMTUuOSAyNi4yIDM3LjEgNDYuOCA2MS45IDYwLjQgMjcuNiAxNS4yIDU5LjggMjMuMyA5My4zIDIzLjMgMzMuNSAwIDY1LjctOC4xIDkzLjMtMjMuMyAyNC44LTEzLjYgNDYtMzQuMiA2MS45LTYwLjQgMTUuOS0yNi4yIDI0LjMtNTYuMiAyNC4zLTg2LjcgMC0zMC41LTguNC02MC41LTI0LjMtODYuN3oiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNNDIwLjkgNDE1LjRjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2em0xODIuMiAwYy0zMC45IDAtNTYtMjUuMS01Ni01NnMyNS4xLTU2IDU2LTU2IDU2IDI1LjEgNTYgNTYtMjUuMSA1Ni01NiA1NnoiLz48L3N2Zz4=" alt="支付宝">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzAwOTZFQyIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjEtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzMuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yNC4zIDg2LjcgMCAzMC41IDguNCA2MC41IDI0LjMgODYuNyAxNS45IDI2LjIgMzcuMSA0Ni44IDYxLjkgNjAuNCAyNy42IDE1LjIgNTkuOCAyMy4zIDkzLjMgMjMuMyAzMy41IDAgNjUuNy04LjEgOTMuMy0yMy4zIDI0LjgtMTMuNiA0Ni0zNC4yIDYxLjktNjAuNCAxNS45LTI2LjIgMjQuMy01Ni4yIDI0LjMtODYuNyAwLTMwLjUtOC40LTYwLjUtMjQuMy04Ni43eiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik00MjAuOSA0MTUuNGMtMzAuOSAwLTU2LTI1LjEtNTYtNTZzMjUuMS01NiA1Ni01NiA1NiAyNS4xIDU2IDU2LTI1LjEgNTYtNTYgNTZ6bTE4Mi4yIDBjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2eiIvPjwvc3ZnPg==" alt="支付宝">
                             </div>
                             <div>支付宝</div>
                         </div>
@@ -997,13 +1013,17 @@
                     <p><strong>订单号:</strong> <span id="payment-order-id"></span></p>
                 </div>
                 
+                <div class="fixed-amount-info">
+                    <p>✅ 此二维码为固定金额支付码，扫码后无需输入金额</p>
+                    </div>
+                
                 <div class="qr-codes">
                     <div class="qr-code" id="wechat-qr-container">
-                        <img id="wechat-qr" src="https://via.placeholder.com/260x260?text=微信收款码" alt="微信个人收款码">
+                        <img id="wechat-qr" src="https://via.placeholder.com/260x260?text=微信固定金额收款码" alt="微信固定金额收款码">
                         <p>微信支付</p>
                     </div>
                     <div class="qr-code" id="alipay-qr-container">
-                        <img id="alipay-qr" src="https://via.placeholder.com/260x260?text=支付宝收款码" alt="支付宝个人收款码">
+                        <img id="alipay-qr" src="https://via.placeholder.com/260x260?text=支付宝固定金额收款码" alt="支付宝固定金额收款码">
                         <p>支付宝</p>
                     </div>
                 </div>
@@ -1091,8 +1111,8 @@
                     <h3>联系我们</h3>
                     <ul class="footer-links">
                         <li>客服微信: runzang888</li>
-                        <li>客服电话: 400-888-9999</li>
-                        <li>服务时间: 9:00-21:00</li>
+                        <li>客服电话: 400-800-1389</li>
+                        <li>服务时间: 9:00-17:00</li>
                     </ul>
                 </div>
             </div>
@@ -1106,6 +1126,26 @@
         // DeepSeek API密钥
         const DEEPSEEK_API_KEY = 'sk-0c763bf4e169413dbd57a45e8ca73a6a';
         const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+        
+        // 固定金额收款码配置
+        const FIXED_AMOUNT_QR_CODES = {
+            '测试验证服务': {
+                wechat: 'images/wechat-pay-19.9.jpg',
+                alipay: 'images/alipay-19.9.jpg'
+            },
+            '流年运势分析': {
+                wechat: 'images/wechat-pay-38.jpg',
+                alipay: 'images/alipay-38.jpg'
+            },
+            '人生详批服务': {
+                wechat: 'images/wechat-pay-138.jpg',
+                alipay: 'images/alipay-138.jpg'
+            },
+            '婚缘配对分析': {
+                wechat: 'images/wechat-pay-52.jpg',
+                alipay: 'images/alipay-52.jpg'
+            }
+        };
         
         // 当前选择的支付信息
         let currentPaymentInfo = null;
@@ -1437,19 +1477,26 @@
             const alipayQRContainer = document.getElementById('alipay-qr-container');
             const statusText = document.getElementById('payment-status-text');
             const orderId = document.getElementById('payment-order-id').textContent;
+            const serviceName = currentPaymentInfo.serviceName;
             
             // 根据支付方式显示对应的二维码
             if (currentPaymentMethod === 'wechat') {
                 wechatQRContainer.style.display = 'block';
                 alipayQRContainer.style.display = 'none';
+                
+                // 设置固定金额微信收款码
+                document.getElementById('wechat-qr').src = FIXED_AMOUNT_QR_CODES[serviceName].wechat;
+                
                 statusText.innerHTML = `请使用微信扫描上方二维码完成支付<br>
-                                        <strong>支付时请务必备注订单号: ${orderId}</strong><br>
                                         支付完成后请点击"我已支付"按钮`;
             } else if (currentPaymentMethod === 'alipay') {
                 wechatQRContainer.style.display = 'none';
                 alipayQRContainer.style.display = 'block';
+                
+                // 设置固定金额支付宝收款码
+                document.getElementById('alipay-qr').src = FIXED_AMOUNT_QR_CODES[serviceName].alipay;
+                
                 statusText.innerHTML = `请使用支付宝扫描上方二维码完成支付<br>
-                                        <strong>支付时请务必备注订单号: ${orderId}</strong><br>
                                         支付完成后请点击"我已支付"按钮`;
             }
         }
@@ -1759,10 +1806,6 @@
                     document.getElementById('name-error').style.display = 'none';
                 }
             });
-            
-            // 替换收款码图片
-            document.getElementById('wechat-qr').src = 'images/wechat-pay.jpg';
-            document.getElementById('alipay-qr').src = 'images/alipay.jpg';
             
             // 点击模态框外部关闭模态框
             document.getElementById('payment-modal').addEventListener('click', function(e) {
