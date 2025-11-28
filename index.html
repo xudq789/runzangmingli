@@ -1511,7 +1511,7 @@
         // 确认支付
         function confirmPayment() {
             const orderId = document.getElementById('payment-order-id').textContent;
-            const confirmed = confirm(`请确认您已完成支付并备注了订单号: ${orderId}\n\n如果未备注订单号，我们将无法为您提供服务。\n\n确认已支付?`);
+            const confirmed = confirm(`请确认您已完成支付，如未支付完成，我们将无法为您提供服务。\n\n确认已支付?`);
             
             if (confirmed) {
                 // 关闭支付弹窗
