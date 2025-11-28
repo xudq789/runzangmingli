@@ -1335,7 +1335,7 @@
             const price = parseFloat(serviceType.split('¥')[1]);
             
             // 生成订单ID
-            const orderId = 'RZ' + Date.now() + Math.floor(Math.random() * 1000);
+            const orderId = 'RZ' + Math.floor(Math.random() * 1000);
             
             // 保存当前支付信息
             currentPaymentInfo = {
