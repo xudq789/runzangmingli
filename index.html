@@ -717,6 +717,61 @@
             font-weight: bold;
             color: #2e7d32;
         }
+        
+        /* 优化结果展示样式 */
+        .result-content {
+            font-family: 'Microsoft YaHei', sans-serif;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .result-section {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .result-section:last-child {
+            border-bottom: none;
+        }
+        
+        .result-section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        
+        .result-item {
+            margin-bottom: 10px;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .result-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background-color: rgba(225, 190, 231, 0.3);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        
+        .important-note {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
     </style>
 </head>
 <body>
@@ -1067,7 +1122,7 @@
             </div>
             
             <div class="analysis-result" id="analysis-result">
-                <div id="result-content" style="margin-bottom: 20px;"></div>
+                <div class="result-content" id="result-content" style="margin-bottom: 20px;"></div>
                 <div class="word-count">报告字数: <span id="word-count">0</span> 字</div>
                 <div class="result-actions">
                     <button class="btn" onclick="copyResult()">复制结果</button>
@@ -1725,17 +1780,83 @@
 以上分析由润藏命理团队专业命理师完成，仅供参考。`;
         }
         
+        // 清理DeepSeek返回结果中的Markdown符号
+        function cleanAnalysisResult(result) {
+            // 替换Markdown标题符号
+            result = result.replace(/#+\s*/g, '');
+            
+            // 替换Markdown粗体符号
+            result = result.replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>');
+            
+            // 替换Markdown斜体符号
+            result = result.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // 替换Markdown列表符号
+            result = result.replace(/\n\s*[-*]\s*/g, '\n• ');
+            
+            // 替换Markdown代码块
+            result = result.replace(/```[\s\S]*?```/g, '');
+            
+            // 替换Markdown行内代码
+            result = result.replace(/`([^`]+)`/g, '$1');
+            
+            // 将数字+点格式转换为有序列表
+            result = result.replace(/\n(\d+)\.\s*/g, '\n$1. ');
+            
+            // 将结果分段处理，添加适当的HTML结构
+            const sections = result.split(/\n\s*\n/);
+            let formattedResult = '';
+            
+            sections.forEach(section => {
+                if (section.trim()) {
+                    // 检测是否为标题行（包含"一、""二、"等或明显的标题特征）
+                    if (/^[一二三四五六七八九十]、/.test(section.trim()) || 
+                        /^[\d]+、/.test(section.trim()) ||
+                        section.includes('分析') || 
+                        section.includes('建议') || 
+                        section.includes('总结')) {
+                        formattedResult += `<div class="result-section"><div class="result-section-title">${section.trim()}</div>`;
+                    } else if (section.includes('重要提示') || section.includes('注意事项')) {
+                        formattedResult += `<div class="important-note">${section.trim()}</div>`;
+                    } else {
+                        // 处理普通段落
+                        const lines = section.split('\n');
+                        let paragraphContent = '';
+                        
+                        lines.forEach(line => {
+                            if (line.trim()) {
+                                // 如果是列表项
+                                if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
+                                    paragraphContent += `<div class="result-item">${line.trim().substring(1).trim()}</div>`;
+                                } else {
+                                    paragraphContent += `<p>${line.trim()}</p>`;
+                                }
+                            }
+                        });
+                        
+                        formattedResult += paragraphContent;
+                    }
+                }
+            });
+            
+            return formattedResult;
+        }
+        
         // 显示分析结果
         function displayAnalysisResult(result) {
+            // 清理Markdown符号并格式化结果
+            const cleanedResult = cleanAnalysisResult(result);
+            
             // 显示分析结果区域
             const resultElement = document.getElementById('analysis-result');
             resultElement.style.display = 'block';
             
-            // 将结果直接显示在正确的位置
-            document.getElementById('result-content').textContent = result;
+            // 将清理后的结果直接显示在正确的位置
+            document.getElementById('result-content').innerHTML = cleanedResult;
             
-            // 计算字数
-            const wordCount = result.replace(/\s/g, '').length;
+            // 计算字数（原始文本，不包括HTML标签）
+            const textContent = document.getElementById('result-content').textContent;
+            const wordCount = textContent.replace(/\s/g, '').length;
             document.getElementById('word-count').textContent = wordCount;
             
             // 隐藏加载动画
@@ -1763,15 +1884,28 @@
             const name = currentUserData.name;
             const orderId = currentPaymentInfo.orderId;
             
-            const blob = new Blob([`润藏命理分析报告\n\n服务类型：${serviceType}\n姓名：${name}\n订单号：${orderId}\n分析时间：${new Date().toLocaleString()}\n\n${resultText}`], { type: 'text/plain' });
+            // 使用UTF-8 BOM确保中文正确显示
+            const BOM = '\uFEFF';
+            
+            // 创建报告内容，确保使用UTF-8编码
+            const reportContent = `润藏命理分析报告\n\n服务类型：${serviceType}\n姓名：${name}\n订单号：${orderId}\n分析时间：${new Date().toLocaleString()}\n\n${resultText}`;
+            
+            // 创建Blob对象，明确指定UTF-8编码
+            const blob = new Blob([BOM + reportContent], { type: 'text/plain;charset=utf-8' });
+            
+            // 创建下载链接
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = `润藏命理分析报告_${name}_${orderId}.txt`;
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            
+            // 清理
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
         }
         
         // 返回首页
