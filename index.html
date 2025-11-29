@@ -22,7 +22,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Microsoft YaHei', sans-serif;
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
@@ -382,7 +382,7 @@
             margin-bottom: 10px;
         }
         
-        /* 加载动画 */
+        /* 加载动画 - 优化后的简化版本 */
         .loading {
             display: none;
             text-align: center;
@@ -404,38 +404,46 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* 分析过程样式 */
+        /* 分析过程样式 - 优化后的简化版本 */
         .analysis-process {
             display: none;
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             background-color: var(--white);
             border-radius: 8px;
             box-shadow: var(--shadow);
             max-width: 800px;
             margin: 0 auto;
+            min-height: 400px;
         }
         
         .analysis-steps {
-            text-align: left;
-            margin: 30px 0;
+            text-align: center;
+            margin: 40px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .analysis-step {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-left: 4px solid var(--primary-color);
+            margin-bottom: 15px;
+            padding: 12px 15px;
             background-color: rgba(106, 27, 154, 0.05);
-            border-radius: 0 4px 4px 0;
+            border-radius: 6px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
         }
         
         .analysis-step.completed {
-            border-left-color: var(--success-color);
+            background-color: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid var(--success-color);
         }
         
         .analysis-step.active {
-            border-left-color: var(--secondary-color);
             background-color: rgba(156, 39, 176, 0.1);
+            border-left: 4px solid var(--secondary-color);
         }
         
         .step-icon {
@@ -447,7 +455,8 @@
             color: white;
             text-align: center;
             line-height: 24px;
-            margin-right: 10px;
+            margin-right: 12px;
+            flex-shrink: 0;
         }
         
         .analysis-step.completed .step-icon {
@@ -458,7 +467,7 @@
             background-color: var(--secondary-color);
         }
         
-        /* 分析结果样式 */
+        /* 分析结果样式 - 优化后的样式 */
         .analysis-result {
             display: none;
             text-align: left;
@@ -472,6 +481,72 @@
             line-height: 1.8;
             max-height: 600px;
             overflow-y: auto;
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .analysis-result-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .analysis-result-content h3 {
+            color: var(--primary-color);
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-color);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .analysis-result-content p {
+            margin-bottom: 15px;
+            text-indent: 2em;
+        }
+
+        .analysis-result-content ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .analysis-result-content li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .analysis-result-content li:before {
+            content: "•";
+            color: var(--secondary-color);
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+        }
+
+        .analysis-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .report-header h2 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .report-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
         }
         
         .result-actions {
@@ -479,6 +554,7 @@
             gap: 15px;
             margin-top: 20px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         
         .word-count {
@@ -668,6 +744,20 @@
             .service-card {
                 padding: 20px;
             }
+
+            .analysis-result {
+                padding: 20px;
+                font-size: 15px;
+            }
+
+            .analysis-process {
+                padding: 40px 15px;
+                min-height: 300px;
+            }
+
+            .analysis-steps {
+                margin: 30px 0;
+            }
         }
         
         @media (max-width: 480px) {
@@ -700,6 +790,10 @@
                 padding: 10px 20px;
                 font-size: 14px;
             }
+
+            .analysis-process {
+                padding: 30px 10px;
+            }
         }
         
         /* 固定金额二维码样式 */
@@ -717,60 +811,42 @@
             font-weight: bold;
             color: #2e7d32;
         }
-        
-        /* 优化结果展示样式 */
-        .result-content {
-            font-family: 'Microsoft YaHei', sans-serif;
-            line-height: 1.8;
-            color: #333;
+
+        /* API状态指示器 */
+        .api-status {
+            display: none;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
         }
-        
-        .result-section {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eaeaea;
+
+        .api-status.retrying {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
         }
-        
-        .result-section:last-child {
-            border-bottom: none;
+
+        .api-status.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
         }
-        
-        .result-section-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--accent-color);
+
+        .api-status.success {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
         }
-        
-        .result-item {
-            margin-bottom: 10px;
-            padding-left: 15px;
-            position: relative;
-        }
-        
-        .result-item::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-            font-weight: bold;
-        }
-        
-        .highlight {
-            background-color: rgba(225, 190, 231, 0.3);
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-weight: 500;
-        }
-        
-        .important-note {
-            background-color: #fff8e1;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
+
+        /* 简化进度指示器 */
+        .progress-info {
             margin: 20px 0;
-            border-radius: 0 4px 4px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
         }
     </style>
 </head>
@@ -1038,7 +1114,7 @@
                         </div>
                         <div class="payment-option" id="alipay" onclick="selectPayment('alipay')">
                             <div class="payment-icon">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzAwOTZFQyIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjEtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzMuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yNC4zIDg2LjcgMCAzMC41IDguNCA2MC41IDI0LjMgODYuNyAxNS45IDI2LjIgMzcuMSA0Ni44IDYxLjkgNjAuNCAyNy42IDE1LjIgNTkuOCAyMy4zIDkzLjMgMjMuMyAzMy41IDAgNjUuNy04LjEgOTMuMy0yMy4zIDI0LjgtMTMuNiA0Ni0zNC4yIDYxLjktNjAuNCAxNS45LTI2LjIgMjQuMy01Ni4yIDI0LjMtODYuNyAwLTMwLjUtOC40LTYwLjUtMjQuMy04Ni43eiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik00MjAuOSA0MTUuNGMtMzAuOSAwLTU2LTI1LjEtNTYtNTZzMjUuMS01NiA1Ni01NiA1NiAyNS4xIDU2IDU2LTI1LjEgNTYtNTYgNTZ6bTE4Mi4yIDBjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2eiIvPjwvc3ZnPg==" alt="支付宝">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCI+PHBhdGggZmlsbD0iIzAwOTZFQyIgZD0iTTUxMiA2NEMyNjQuNiA2NCA2NCAyNjQuNiA2NCA1MTJzMjAwLjYgNDQ4IDQ0OCA0NDggNDQ4LTIwMC42IDQ0OC00NDhTNzU5LjQgNjQgNTEyIDY0em0yNzQuNiA0MTUuNGMtMTUuOS0yNi4yLTM3LjUtNDYuOC02MS45LTYwLjQtMjcuNi0xNS4yLTU5LjgtMjMuMy05My4zLTIzLjMtMzMuNSAwLTY1LjcgOC4xLTkzLjMgMjMuMy0yNC44IDEzLjYtNDYgMzMuMi02MS45IDYwLjQtMTUuOSAyNi4yLTI0LjMgNTYuMi0yNC4zIDg2LjcgMCAzMC41IDguNCA2MC41IDI0LjMgODYuNyAxNS45IDI2LjIgMzcuMSA0Ni44IDYxLjkgNjAuNCAyNy42IDE1LjIgNTkuOCAyMy4zIDkzLjMgMjMuMyAzMy41IDAgNjUuNy04LjEgOTMuMy0yMy4zIDI0LjgtMTMuNiA0Ni0zNC4yIDYxLjktNjAuNCAxNS45LTI2LjIgMjQuMy01Ni4yIDI0LjMtODYuNyAwLTMwLjUtOC40LTYwLjUtMjQuMy04Ni43eiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik00MjAuOSA0MTUuNGMtMzAuOSAwLTU2LTI1LjEtNTYtNTZzMjUuMS01NiA1Ni01NiA1NiAyNS4xIDU2IDU2LTI1LjEgNTYtNTYgNTZ6bTE4Mi4yIDBjLTMwLjkgMC01Ni0yNS4xLTU2LTU2czI1LjEtNTYgNTYtNTYgNTYgMjUuMSA1NiA1Ni0yNS4xIDU2LTU2IDU2eiIvPjwvc3ZnPg==" alt="支付宝">
                             </div>
                             <div>支付宝</div>
                         </div>
@@ -1095,38 +1171,41 @@
         </div>
     </div>
 
-    <!-- 分析过程 -->
+    <!-- 分析过程 - 优化后的简化版本 -->
     <section id="analysis-process-section" class="analysis-process" style="display: none;">
         <div class="container">
             <div class="spinner"></div>
             <h3>润藏命理团队正在为您分析</h3>
             <p>基于您的出生信息和求测事项，我们的专业命理师团队正在深入分析...</p>
             
+            <div class="api-status" id="api-status"></div>
+            
+            <div class="progress-info">
+                <p>当前进度: <span id="progress-text">正在初始化分析引擎...</span></p>
+            </div>
+            
             <div class="analysis-steps">
                 <div class="analysis-step" id="step1">
                     <span class="step-icon">1</span>
-                    <strong>八字排盘</strong> - 正在计算您的八字命盘...
+                    <strong>数据解析与八字排盘</strong>
                 </div>
                 <div class="analysis-step" id="step2">
                     <span class="step-icon">2</span>
-                    <strong>大运分析</strong> - 正在分析您的人生大运走势...
+                    <strong>命理分析与深度计算</strong>
                 </div>
                 <div class="analysis-step" id="step3">
                     <span class="step-icon">3</span>
-                    <strong>流年运势</strong> - 正在计算您的流年吉凶...
-                </div>
-                <div class="analysis-step" id="step4">
-                    <span class="step-icon">4</span>
-                    <strong>综合分析</strong> - 正在生成完整的命理报告...
+                    <strong>报告生成与优化</strong>
                 </div>
             </div>
             
             <div class="analysis-result" id="analysis-result">
-                <div class="result-content" id="result-content" style="margin-bottom: 20px;"></div>
+                <div id="result-content" class="analysis-result-content"></div>
                 <div class="word-count">报告字数: <span id="word-count">0</span> 字</div>
                 <div class="result-actions">
                     <button class="btn" onclick="copyResult()">复制结果</button>
                     <button class="btn" onclick="downloadResult()">下载报告</button>
+                    <button class="btn" onclick="downloadPDF()">下载PDF</button>
                     <button class="btn" style="background-color: #6c757d;" onclick="goToHome()">返回首页</button>
                 </div>
             </div>
@@ -1177,6 +1256,9 @@
         </div>
     </footer>
 
+    <!-- 引入html2pdf库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <script>
         // DeepSeek API密钥
         const DEEPSEEK_API_KEY = 'sk-0c763bf4e169413dbd57a45e8ca73a6a';
@@ -1223,7 +1305,7 @@
 4. 过往关键流年吉凶验证
 5. 提供专业建议
 
-请用专业、详细但易懂的语言回复，字数在2500-3000字左右。`,
+请用专业、详细但易懂的语言回复，字数在2500-3000字左右。回复中不要使用任何markdown符号如#、*、-等，请使用纯文本格式。`,
 
             '流年运势分析': `你是一位职业的命理大师，请根据以下信息进行八字分析：
 
@@ -1240,7 +1322,7 @@
 4. 事业财运、婚姻感情等人生大事分析
 5. 提供年度建议和注意事项
 
-请用专业、详细但易懂的语言回复，字数在2500-3000字左右。`,
+请用专业、详细但易懂的语言回复，字数在2500-3000字左右。回复中不要使用任何markdown符号如#、*、-等，请使用纯文本格式。`,
 
             '人生详批服务': `你是一位职业的命理大师，请根据以下信息进行八字分析：
 
@@ -1259,7 +1341,7 @@
 6. 重要人生事项提醒
 7. 风水建议和个人发展建议
 
-请用专业、详尽但易懂的语言回复，字数在3000-3500字左右。`,
+请用专业、详尽但易懂的语言回复，字数在3000-3500字左右。回复中不要使用任何markdown符号如#、*、-等，请使用纯文本格式。`,
 
             '婚缘配对分析': `你是一位职业的命理大师，请根据以下信息进行八字分析：
 
@@ -1282,7 +1364,7 @@
 4. 双方性格匹配度
 5. 提供婚姻建议和注意事项
 
-请用专业、详细但易懂的语言回复，字数在2500-3000字左右。`
+请用专业、详细但易懂的语言回复，字数在2500-3000字左右。回复中不要使用任何markdown符号如#、*、-等，请使用纯文本格式。`
         };
         
         // 生成小时和分钟选项
@@ -1599,7 +1681,7 @@
             
             try {
                 // 调用DeepSeek API进行命理分析
-                const analysisResult = await callDeepSeekAPI(currentUserData);
+                const analysisResult = await callDeepSeekAPIWithRetry(currentUserData);
                 
                 // 显示分析结果
                 displayAnalysisResult(analysisResult);
@@ -1653,10 +1735,19 @@
             };
         }
         
-        // 更新分析步骤
+        // 更新分析步骤 - 优化后的简化版本
         function updateAnalysisStep(step) {
+            // 更新进度文本
+            const progressTexts = [
+                "正在初始化分析引擎...",
+                "正在进行八字排盘和数据解析...", 
+                "正在进行深度命理分析...",
+                "正在生成最终报告..."
+            ];
+            document.getElementById('progress-text').textContent = progressTexts[step-1] || "分析进行中...";
+            
             // 重置所有步骤
-            for (let i = 1; i <= 4; i++) {
+            for (let i = 1; i <= 3; i++) {
                 const stepElement = document.getElementById('step' + i);
                 stepElement.classList.remove('completed', 'active');
             }
@@ -1668,18 +1759,145 @@
             }
             
             // 设置当前步骤
-            const currentStep = document.getElementById('step' + step);
-            currentStep.classList.add('active');
+            if (step <= 3) {
+                const currentStep = document.getElementById('step' + step);
+                currentStep.classList.add('active');
+            }
             
             // 模拟步骤进度
-            if (step < 4) {
+            if (step < 3) {
                 setTimeout(() => {
                     updateAnalysisStep(step + 1);
-                }, 1500);
+                }, 2000);
             }
         }
         
-        // 调用DeepSeek API
+        // 带重试机制的DeepSeek API调用
+        async function callDeepSeekAPIWithRetry(userData, retryCount = 0) {
+            const maxRetries = 5; // 增加重试次数
+            const baseDelay = 2000; // 基础延迟2秒
+            
+            try {
+                showAPIStatus('retrying', `正在进行分析... (尝试 ${retryCount + 1}/${maxRetries + 1})`);
+                
+                const result = await callDeepSeekAPI(userData);
+                
+                // 检查内容完整性
+                if (isContentComplete(result, userData.serviceType)) {
+                    showAPIStatus('success', '分析完成！');
+                    return result;
+                } else {
+                    throw new Error('API返回内容不完整');
+                }
+                
+            } catch (error) {
+                console.error(`API调用失败 (尝试 ${retryCount + 1}/${maxRetries + 1}):`, error);
+                
+                if (retryCount < maxRetries) {
+                    const delay = baseDelay * Math.pow(2, retryCount); // 指数退避
+                    showAPIStatus('retrying', `分析遇到问题，${delay/1000}秒后重试... (${retryCount + 1}/${maxRetries})`);
+                    
+                    // 等待一段时间后重试
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return callDeepSeekAPIWithRetry(userData, retryCount + 1);
+                } else {
+                    showAPIStatus('error', '分析失败，使用备用方案生成报告');
+                    return getMockAnalysisResult(userData);
+                }
+            }
+        }
+        
+        // 显示API状态
+        function showAPIStatus(type, message) {
+            const statusElement = document.getElementById('api-status');
+            statusElement.textContent = message;
+            statusElement.className = 'api-status ' + type;
+            statusElement.style.display = 'block';
+        }
+        
+        // 检查内容完整性
+        function isContentComplete(content, serviceType) {
+            if (!content || content.length < 800) { // 提高最小字数要求
+                console.warn('内容长度不足:', content?.length);
+                return false;
+            }
+            
+            // 检查是否包含关键部分
+            const requiredSections = {
+                '测试验证服务': ['八字', '性格', '大运', '流年', '建议'],
+                '流年运势分析': ['八字', '性格', '运势', '建议', '分析'],
+                '人生详批服务': ['八字', '性格', '大运', '流年', '建议', '分析'],
+                '婚缘配对分析': ['八字', '感情', '婚姻', '建议', '分析']
+            };
+            
+            const sections = requiredSections[serviceType] || [];
+            const hasRequiredSections = sections.every(section => content.includes(section));
+            
+            if (!hasRequiredSections) {
+                console.warn('缺少必要段落:', sections.filter(s => !content.includes(s)));
+            }
+            
+            return hasRequiredSections;
+        }
+        
+        // 清理报告内容 - 移除markdown符号并优化格式
+        function cleanReportContent(content) {
+            if (!content) return '';
+            
+            // 移除markdown符号
+            let cleaned = content
+                .replace(/#{1,6}\s?/g, '') // 移除标题符号
+                .replace(/\*\*(.*?)\*\*/g, '$1') // 移除粗体
+                .replace(/\*(.*?)\*/g, '$1') // 移除斜体
+                .replace(/~~(.*?)~~/g, '$1') // 移除删除线
+                .replace(/`(.*?)`/g, '$1') // 移除行内代码
+                .replace(/```[\s\S]*?```/g, '') // 移除代码块
+                .replace(/\[(.*?)\]\(.*?\)/g, '$1') // 移除链接
+                .replace(/^-\s/gm, '• ') // 将-列表项转换为•
+                .replace(/^\d+\.\s/gm, ''); // 移除数字列表
+            
+            // 优化段落格式
+            cleaned = cleaned
+                .replace(/\n{3,}/g, '\n\n') // 将多个空行减少为两个
+                .replace(/^\s+|\s+$/g, ''); // 移除首尾空白
+            
+            return cleaned;
+        }
+        
+        // 格式化报告内容为HTML
+        function formatReportToHTML(content) {
+            if (!content) return '';
+            
+            let html = content;
+            
+            // 将段落转换为p标签
+            html = html.replace(/([^\n])\n([^\n])/g, '$1 $2'); // 合并单行断行
+            html = html.split(/\n\n+/).map(paragraph => {
+                if (paragraph.trim()) {
+                    return `<p>${paragraph.trim()}</p>`;
+                }
+                return '';
+            }).join('');
+            
+            // 处理标题（通过识别关键词语）
+            const titlePatterns = [
+                { pattern: /(一、|二、|三、|四、|五、|六、|七、|八、|九、|十、)([^<]+)/g, replacement: '<h3>$1$2</h3>' },
+                { pattern: /(【[^】]+】)/g, replacement: '<h3>$1</h3>' },
+                { pattern: /(第[一二三四五六七八九十]+部分[：:])/g, replacement: '<h3>$1</h3>' }
+            ];
+            
+            titlePatterns.forEach(({ pattern, replacement }) => {
+                html = html.replace(pattern, replacement);
+            });
+            
+            // 处理列表项
+            html = html.replace(/•\s([^<]+)/g, '<li>$1</li>');
+            html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+            
+            return html;
+        }
+        
+        // 调用DeepSeek API - 修复API调用参数
         async function callDeepSeekAPI(userData) {
             // 构建提示词
             let prompt = PROMPT_TEMPLATES[userData.serviceType];
@@ -1713,11 +1931,11 @@
                         'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-reasoner',
+                        model: 'deepseek-chat', // 使用正确的模型名称
                         messages: [
                             {
                                 role: 'system',
-                                content: '你是一位专业的命理大师，精通八字命理、紫微斗数等传统命理学说。请用专业、详细但易懂的语言为用户提供命理分析。'
+                                content: '你是一位专业的命理大师，精通八字命理、紫微斗数等传统命理学说。请用专业、详细但易懂的语言为用户提供命理分析。回复中不要使用任何markdown符号，使用纯文本格式。'
                             },
                             {
                                 role: 'user',
@@ -1725,26 +1943,28 @@
                             }
                         ],
                         max_tokens: 4000,
-                        temperature: 0.7
+                        temperature: 0.7,
+                        stream: false
                     })
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+                    const errorText = await response.text();
+                    throw new Error(`API请求失败: ${response.status} ${response.statusText} - ${errorText}`);
                 }
                 
                 const data = await response.json();
                 
-                if (data.choices && data.choices.length > 0) {
+                if (data.choices && data.choices.length > 0 && data.choices[0].message) {
                     return data.choices[0].message.content;
                 } else {
+                    console.error('API返回数据格式异常:', data);
                     throw new Error('API返回数据格式错误');
                 }
                 
             } catch (error) {
                 console.error('DeepSeek API调用失败:', error);
-                // 如果API调用失败，返回模拟数据
-                return getMockAnalysisResult(userData);
+                throw error;
             }
         }
         
@@ -1761,9 +1981,9 @@
 日主为[日主]，生于[月令]月，整体格局为[格局类型]。
 
 五行喜忌：
-- 喜神：[喜神]
-- 用神：[用神]
-- 忌神：[忌神]
+喜神：[喜神]
+用神：[用神]
+忌神：[忌神]
 
 二、性格特点
 您具有[性格特点1]、[性格特点2]的特质，为人[性格描述]。在人际交往中[社交特点]，在事业上[事业倾向]。
@@ -1773,94 +1993,51 @@
 
 四、专业建议
 基于您的命局特点，建议您：
-1. [建议1]
-2. [建议2]
-3. [建议3]
+• [建议1]
+• [建议2]
+• [建议3]
 
 以上分析由润藏命理团队专业命理师完成，仅供参考。`;
         }
         
-        // 清理DeepSeek返回结果中的Markdown符号
-        function cleanAnalysisResult(result) {
-            // 替换Markdown标题符号
-            result = result.replace(/#+\s*/g, '');
-            
-            // 替换Markdown粗体符号
-            result = result.replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>');
-            
-            // 替换Markdown斜体符号
-            result = result.replace(/\*(.*?)\*/g, '<em>$1</em>');
-            
-            // 替换Markdown列表符号
-            result = result.replace(/\n\s*[-*]\s*/g, '\n• ');
-            
-            // 替换Markdown代码块
-            result = result.replace(/```[\s\S]*?```/g, '');
-            
-            // 替换Markdown行内代码
-            result = result.replace(/`([^`]+)`/g, '$1');
-            
-            // 将数字+点格式转换为有序列表
-            result = result.replace(/\n(\d+)\.\s*/g, '\n$1. ');
-            
-            // 将结果分段处理，添加适当的HTML结构
-            const sections = result.split(/\n\s*\n/);
-            let formattedResult = '';
-            
-            sections.forEach(section => {
-                if (section.trim()) {
-                    // 检测是否为标题行（包含"一、""二、"等或明显的标题特征）
-                    if (/^[一二三四五六七八九十]、/.test(section.trim()) || 
-                        /^[\d]+、/.test(section.trim()) ||
-                        section.includes('分析') || 
-                        section.includes('建议') || 
-                        section.includes('总结')) {
-                        formattedResult += `<div class="result-section"><div class="result-section-title">${section.trim()}</div>`;
-                    } else if (section.includes('重要提示') || section.includes('注意事项')) {
-                        formattedResult += `<div class="important-note">${section.trim()}</div>`;
-                    } else {
-                        // 处理普通段落
-                        const lines = section.split('\n');
-                        let paragraphContent = '';
-                        
-                        lines.forEach(line => {
-                            if (line.trim()) {
-                                // 如果是列表项
-                                if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
-                                    paragraphContent += `<div class="result-item">${line.trim().substring(1).trim()}</div>`;
-                                } else {
-                                    paragraphContent += `<p>${line.trim()}</p>`;
-                                }
-                            }
-                        });
-                        
-                        formattedResult += paragraphContent;
-                    }
-                }
-            });
-            
-            return formattedResult;
-        }
-        
         // 显示分析结果
         function displayAnalysisResult(result) {
-            // 清理Markdown符号并格式化结果
-            const cleanedResult = cleanAnalysisResult(result);
+            // 清理和格式化结果
+            const cleanedResult = cleanReportContent(result);
+            const formattedHTML = formatReportToHTML(cleanedResult);
+            
+            // 创建完整的报告HTML
+            const reportHTML = `
+                <div class="report-header">
+                    <h2>润藏命理分析报告</h2>
+                    <div class="report-meta">
+                        <p>服务类型：${currentUserData.serviceType}</p>
+                        <p>姓名：${currentUserData.name}</p>
+                        <p>订单号：${currentPaymentInfo.orderId}</p>
+                        <p>分析时间：${new Date().toLocaleString('zh-CN')}</p>
+                    </div>
+                </div>
+                <div class="analysis-sections">
+                    ${formattedHTML}
+                </div>
+            `;
             
             // 显示分析结果区域
             const resultElement = document.getElementById('analysis-result');
             resultElement.style.display = 'block';
             
-            // 将清理后的结果直接显示在正确的位置
-            document.getElementById('result-content').innerHTML = cleanedResult;
+            // 将格式化后的HTML显示在结果区域
+            document.getElementById('result-content').innerHTML = reportHTML;
             
-            // 计算字数（原始文本，不包括HTML标签）
-            const textContent = document.getElementById('result-content').textContent;
-            const wordCount = textContent.replace(/\s/g, '').length;
+            // 计算字数
+            const wordCount = cleanedResult.replace(/\s/g, '').length;
             document.getElementById('word-count').textContent = wordCount;
             
             // 隐藏加载动画
             document.querySelector('.spinner').style.display = 'none';
+            
+            // 隐藏API状态
+            document.getElementById('api-status').style.display = 'none';
             
             // 滚动到结果区域
             resultElement.scrollIntoView({ behavior: 'smooth' });
@@ -1877,35 +2054,89 @@
             });
         }
         
-        // 下载分析报告
+        // 下载分析报告为文本文件
         function downloadResult() {
             const resultText = document.getElementById('result-content').textContent;
             const serviceType = currentPaymentInfo.serviceName;
             const name = currentUserData.name;
             const orderId = currentPaymentInfo.orderId;
             
-            // 使用UTF-8 BOM确保中文正确显示
-            const BOM = '\uFEFF';
-            
-            // 创建报告内容，确保使用UTF-8编码
-            const reportContent = `润藏命理分析报告\n\n服务类型：${serviceType}\n姓名：${name}\n订单号：${orderId}\n分析时间：${new Date().toLocaleString()}\n\n${resultText}`;
-            
-            // 创建Blob对象，明确指定UTF-8编码
-            const blob = new Blob([BOM + reportContent], { type: 'text/plain;charset=utf-8' });
-            
-            // 创建下载链接
+            // 创建格式化的文本内容
+            const formattedText = `润藏命理分析报告
+
+服务类型：${serviceType}
+姓名：${name}
+订单号：${orderId}
+分析时间：${new Date().toLocaleString('zh-CN')}
+
+${'='.repeat(50)}
+
+${resultText}
+
+${'='.repeat(50)}
+润藏命理咨询平台
+分析完成时间：${new Date().toLocaleString('zh-CN')}
+`;
+
+            const blob = new Blob([formattedText], { type: 'text/plain; charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = `润藏命理分析报告_${name}_${orderId}.txt`;
             document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 下载分析报告为PDF - 修复PDF下载功能
+        function downloadPDF() {
+            const element = document.getElementById('result-content');
+            const serviceType = currentPaymentInfo.serviceName;
+            const name = currentUserData.name;
+            const orderId = currentPaymentInfo.orderId;
             
-            // 清理
-            setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }, 100);
+            // 保存原始内容
+            const originalHTML = element.innerHTML;
+            
+            // 创建PDF专用内容，确保中文字体
+            const pdfContent = document.createElement('div');
+            pdfContent.innerHTML = originalHTML;
+            pdfContent.style.fontFamily = 'Microsoft YaHei, SimSun, sans-serif';
+            pdfContent.style.padding = '20px';
+            pdfContent.style.fontSize = '14px';
+            pdfContent.style.lineHeight = '1.6';
+            
+            // 临时显示加载提示
+            element.innerHTML = '<div style="text-align: center; padding: 50px; font-family: Microsoft YaHei;"><h3>正在生成PDF文件...</h3><p>请稍候，这可能需要几秒钟时间</p></div>';
+            
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `润藏命理分析报告_${name}_${orderId}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait',
+                    compress: true
+                }
+            };
+            
+            // 使用html2pdf生成PDF
+            html2pdf().set(opt).from(pdfContent).toPdf().get('pdf').then(function(pdf) {
+                // 恢复原始内容
+                element.innerHTML = originalHTML;
+            }).save().catch(error => {
+                console.error('PDF生成失败:', error);
+                // 恢复原始内容
+                element.innerHTML = originalHTML;
+                alert('PDF生成失败: ' + error.message + '，请尝试下载文本版本或联系客服');
+            });
         }
         
         // 返回首页
@@ -1923,6 +2154,9 @@
             
             // 重置加载动画
             document.querySelector('.spinner').style.display = 'block';
+            
+            // 隐藏API状态
+            document.getElementById('api-status').style.display = 'none';
             
             // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
