@@ -1931,11 +1931,11 @@
                         'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat', // 使用正确的模型名称
+                        model: 'deepseek-reasoner', // 使用正确的模型名称
                         messages: [
                             {
                                 role: 'system',
-                                content: '你是一位专业的命理大师，精通八字命理、紫微斗数等传统命理学说。请用专业、详细但易懂的语言为用户提供命理分析。回复中不要使用任何markdown符号，使用纯文本格式。'
+                                content: '你是一位职业的命理大师，请根据一下信息进项八字分析，用余氏用神、沈氏格局、六十甲子日时断法则分析命局层次，用沈氏大运、金不换大运、刑冲合会法则分析大运吉凶，用喜忌用神、刑冲合会分析流年吉凶。回复中不要使用任何markdown符号，使用纯文本格式。'
                             },
                             {
                                 role: 'user',
